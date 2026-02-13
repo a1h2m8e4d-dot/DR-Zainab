@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>حجز كورس محاسة 2 | د / زينب جابر</title>
+<title>تسجيل المحاسبة المالية | د / زينب جابر</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
@@ -12,49 +12,116 @@ body{
     margin:0;
     font-family:'Cairo',sans-serif;
     direction:rtl;
-    background: linear-gradient(135deg,#0b0f2b,#11183c,#1a237e);
-    background-size:400% 400%;
-    animation: spaceBG 15s ease infinite;
+    overflow:hidden;
+    background:#050816;
     color:white;
 }
 
-@keyframes spaceBG{
-    0%{background-position:0% 50%;}
-    50%{background-position:100% 50%;}
-    100%{background-position:0% 50%;}
+/* النجوم */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
 }
 
+/* كواكب */
+.planet{
+    position:absolute;
+    border-radius:50%;
+    opacity:0.6;
+    animation:float 6s ease-in-out infinite;
+}
+
+.planet1{
+    width:120px;
+    height:120px;
+    background:radial-gradient(circle,#00c6ff,#0044ff);
+    top:10%;
+    left:10%;
+}
+
+.planet2{
+    width:80px;
+    height:80px;
+    background:radial-gradient(circle,#ff9800,#ff5722);
+    bottom:15%;
+    right:12%;
+}
+
+@keyframes float{
+    0%{transform:translateY(0px);}
+    50%{transform:translateY(-20px);}
+    100%{transform:translateY(0px);}
+}
+
+/* آلة حاسبة */
+.calculator{
+    position:absolute;
+    top:60%;
+    left:8%;
+    font-size:40px;
+    animation:rotate 10s linear infinite;
+}
+
+@keyframes rotate{
+    from{transform:rotate(0deg);}
+    to{transform:rotate(360deg);}
+}
+
+/* الفورم */
 .container{
+    position:relative;
     max-width:450px;
-    margin:60px auto;
-    padding:30px;
+    margin:80px auto;
+    padding:35px;
     background:rgba(255,255,255,0.05);
-    backdrop-filter:blur(15px);
+    backdrop-filter:blur(20px);
     border-radius:20px;
-    box-shadow:0 0 30px rgba(0,150,255,0.3);
+    box-shadow:0 0 40px rgba(0,150,255,0.3);
+}
+
+.logo{
+    width:130px;
+    display:block;
+    margin:0 auto 15px;
+    filter:drop-shadow(0 0 15px #00c6ff);
 }
 
 h2{
     text-align:center;
-    margin-bottom:20px;
     color:#4fc3f7;
+}
+
+.input-group{
+    position:relative;
+    margin:20px 0;
 }
 
 input,select{
     width:100%;
-    padding:12px;
-    margin:10px 0;
-    border:none;
-    border-radius:8px;
+    padding:14px;
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.2);
+    border-radius:12px;
+    color:white;
+    font-size:15px;
     outline:none;
+    transition:0.3s;
+}
+
+input:focus,select:focus{
+    border-color:#00c6ff;
+    box-shadow:0 0 10px #00c6ff;
 }
 
 button{
     width:100%;
-    padding:12px;
+    padding:14px;
+    margin-top:10px;
     background:linear-gradient(45deg,#00c6ff,#0072ff);
     border:none;
-    border-radius:10px;
+    border-radius:12px;
     color:white;
     font-size:16px;
     cursor:pointer;
@@ -63,7 +130,7 @@ button{
 
 button:hover{
     transform:scale(1.05);
-    box-shadow:0 0 15px #00c6ff;
+    box-shadow:0 0 20px #00c6ff;
 }
 
 #result{
@@ -72,52 +139,79 @@ button:hover{
     font-weight:bold;
     color:#00e676;
 }
-
-.logo{
-    width:130px;
-    display:block;
-    margin:0 auto 15px;
-    filter: drop-shadow(0 0 10px #00c6ff);
-}
-
-.footer{
-    text-align:center;
-    margin-top:20px;
-    font-size:13px;
-    color:#ccc;
-}
 </style>
 </head>
 
 <body>
 
+<canvas id="stars"></canvas>
+
+<div class="planet planet1"></div>
+<div class="planet planet2"></div>
+
+<div class="calculator">🧮</div>
+
 <div class="container">
 
 <img src="logo.png.jpeg" class="logo">
 
-<h2>2 حجز كورس المحاسبة المالية<br>د / زينب جابر</h2>
+<h2>حجز كورس المحاسبة المالية<br>د / زينب جابر</h2>
 
+<div class="input-group">
 <input type="text" id="name" placeholder="الاسم بالكامل">
-<input type="text" id="phone" placeholder="رقم الموبايل">
+</div>
 
+<div class="input-group">
+<input type="text" id="phone" placeholder="رقم الموبايل">
+</div>
+
+<div class="input-group">
 <select id="time">
 <option value="">اختر الميعاد</option>
 <option>الاحد 3 مساءً</option>
 <option>الاحد 6 مساءً</option>
-<option>الاثنين 5 مساءً</option>
+<option>االاثنين 5 مساءً</option>
 </select>
+</div>
 
 <button onclick="submitForm()">تسجيل الآن</button>
 
 <div id="result"></div>
 
-<div class="footer">
-نظام تسجيل إلكتروني © 2026
-</div>
-
 </div>
 
 <script>
+/* نجوم حقيقية */
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+for(let i=0;i<150;i++){
+    stars.push({
+        x:Math.random()*canvas.width,
+        y:Math.random()*canvas.height,
+        radius:Math.random()*1.5,
+        speed:Math.random()*0.5
+    });
+}
+
+function drawStars(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    ctx.fillStyle="white";
+    stars.forEach(star=>{
+        ctx.beginPath();
+        ctx.arc(star.x,star.y,star.radius,0,Math.PI*2);
+        ctx.fill();
+        star.y += star.speed;
+        if(star.y > canvas.height) star.y = 0;
+    });
+    requestAnimationFrame(drawStars);
+}
+drawStars();
+
+/* ارسال البيانات */
 function submitForm() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
@@ -128,7 +222,7 @@ function submitForm() {
         return;
     }
 
-    fetch("PUT_YOUR_SCRIPT_URL_HERE", {
+    fetch("https://script.google.com/macros/s/AKfycbxo2iOGVlxsObqsfeGG6CXXIMjrLMuO_06_8H6L6nzPaiudjYwAKfje_IV_PtlfyWR-/exec", {
         method: "POST",
         body: JSON.stringify({name, phone, time}),
         headers: {"Content-Type": "application/json"}
