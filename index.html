@@ -92,12 +92,13 @@ async function submitForm() {
     try {
 
         let response = await fetch("https://script.google.com/macros/s/AKfycbzZ3uVE1TS302bskCP6XLyJyYIODn2c5JaLH7H47m_cAKkAi_USLvC9wddUISBB0hHl/exec", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ name, phone, time })
-        });
+    method: "POST",
+    body: new URLSearchParams({
+        name: name,
+        phone: phone,
+        time: time
+    })
+});
 
         let result = await response.text();
 
