@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>تسجيل المحاسبة المالية | د / زينب جابر</title>
 
-<link href="https://script.google.com/macros/s/AKfycbz2b-ZaXYDemFzX2xrWMz0cN3pWe4gDnDjFJC4z9_mcVihS2bVErea5LfeUX27-SRYc/exec" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
 
 <style>
 body{
     margin:0;
     font-family:'Cairo',sans-serif;
     direction:rtl;
-   overflow:auto;
+    overflow-x:hidden;
     background:#050816;
     color:white;
 }
@@ -55,20 +55,6 @@ canvas{
     100%{transform:translateY(0px);}
 }
 
-/* آلة حاسبة */
-.calculator{
-    position:absolute;
-    top:60%;
-    left:8%;
-    font-size:40px;
-    animation:rotate 10s linear infinite;
-}
-
-@keyframes rotate{
-    from{transform:rotate(0deg);}
-    to{transform:rotate(360deg);}
-}
-
 /* الفورم */
 .container{
     position:relative;
@@ -94,7 +80,6 @@ h2{
 }
 
 .input-group{
-    position:relative;
     margin:20px 0;
 }
 
@@ -125,12 +110,6 @@ button{
     color:white;
     font-size:16px;
     cursor:pointer;
-    transition:0.3s;
-}
-
-button:hover{
-    transform:scale(1.05);
-    box-shadow:0 0 20px #00c6ff;
 }
 
 #result{
@@ -138,6 +117,24 @@ button:hover{
     text-align:center;
     font-weight:bold;
     color:#00e676;
+}
+
+.copyright{
+    margin-top:25px;
+    font-size:13px;
+    color:#aaa;
+    text-align:center;
+}
+
+/* موبايل */
+@media (max-width:768px){
+    .container{
+        margin:40px 15px;
+        padding:25px;
+    }
+    h2{
+        font-size:18px;
+    }
 }
 </style>
 </head>
@@ -148,8 +145,6 @@ button:hover{
 
 <div class="planet planet1"></div>
 <div class="planet planet2"></div>
-
-<div class="calculator">🧮</div>
 
 <div class="container">
 
@@ -170,7 +165,7 @@ button:hover{
 <option value="">اختر الميعاد</option>
 <option>الاحد 3 مساءً</option>
 <option>الاحد 6 مساءً</option>
-<option>االاثنين 5 مساءً</option>
+<option>الاثنين 5 مساءً</option>
 </select>
 </div>
 
@@ -178,10 +173,15 @@ button:hover{
 
 <div id="result"></div>
 
+<div class="copyright">
+© 2026 د / زينب جابر - جميع الحقوق محفوظة
+</div>
+
 </div>
 
 <script>
-/* نجوم حقيقية */
+
+/* النجوم */
 const canvas = document.getElementById("stars");
 const ctx = canvas.getContext("2d");
 canvas.width = window.innerWidth;
@@ -213,6 +213,7 @@ drawStars();
 
 /* ارسال البيانات */
 function submitForm() {
+
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
     const time = document.getElementById("time").value;
@@ -222,15 +223,25 @@ function submitForm() {
         return;
     }
 
-    fetch("https://script.google.com/macros/s/AKfycbz2b-ZaXYDemFzX2xrWMz0cN3pWe4gDnDjFJC4z9_mcVihS2bVErea5LfeUX27-SRYc/exec", {
+    const scriptURL = "https://script.google.com/macros/s/AKfycbz2b-ZaXYDemFzX2xrWMz0cN3pWe4gDnDjFJC4z9_mcVihS2bVErea5LfeUX27-SRYc/exec";
+
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("phone", phone);
+    formData.append("time", time);
+
+    fetch(scriptURL, {
         method: "POST",
-        body: JSON.stringify({name, phone, time}),
-        headers: {"Content-Type": "application/json"}
+        body: formData
     })
-    .then(res => res.json())
+    .then(response => response.json())
     .then(data => {
         document.getElementById("result").innerHTML =
         "تم التسجيل بنجاح 🚀<br>كود الحجز: " + data.code;
+    })
+    .catch(error => {
+        alert("حدث خطأ في الاتصال");
+        console.error(error);
     });
 }
 </script>
