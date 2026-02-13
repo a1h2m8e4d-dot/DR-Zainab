@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تسجيل الطلاب | د / زينب جابر</title>
+
+<style>
+body {
+    font-family: Arial;
+    direction: rtl;
+    background: #f4f6f9;
+    text-align: center;
+    padding: 30px;
+}
+.container {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: auto;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+}
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+}
+button {
+    background: #1e88e5;
+    color: white;
+    padding: 10px;
+    border: none;
+    width: 100%;
+    cursor: pointer;
+}
+#result {
+    margin-top: 20px;
+    font-weight: bold;
+    color: green;
+}
+.logo {
+    width:120px;
+    margin-bottom:15px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<img src="logo.png" class="logo">
+<h2>تسجيل حضور محاضرات<br>د / زينب جابر</h2>
+
+<input type="text" id="name" placeholder="الاسم بالكامل">
+<input type="text" id="phone" placeholder="رقم الموبايل">
+
+<select id="time">
+<option value="">اختر الميعاد</option>
+<option>الاحد 3 مساءً</option>
+<option>الاحد 6 مساءً</option>
+<option>الاثنين 5 مساءً</option>
+</select>
+
+<button onclick="submitForm()">تسجيل</button>
+
+<div id="result"></div>
+</div>
+
+<script>
+function generateCode() {
+    return "STD-" + Math.random().toString(36).substring(2,10).toUpperCase();
+}
+
+function submitForm() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const time = document.getElementById("time").value;
+
+    if(!name || !phone || !time){
+        alert("املأ كل البيانات");
+        return;
+    }
+
+    fetch("PUT_YOUR_SCRIPT_URL_HERE", {
+        method: "POST",
+        body: JSON.stringify({name, phone, time}),
+        headers: {"Content-Type": "application/json"}
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("result").innerHTML =
+        "تم التسجيل ✅<br> كود الحجز: " + data.code;
+    });
+}
