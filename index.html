@@ -74,6 +74,11 @@ button {
 let currentCode = 1;
 
 async function submitForm() {
+    if (!name || !phone || !time) {
+    alert("من فضلك املأ جميع البيانات");
+    return;
+}
+
     let name = document.getElementById("name").value;
     let phone = document.getElementById("phone").value;
     let time = document.getElementById("time").value;
