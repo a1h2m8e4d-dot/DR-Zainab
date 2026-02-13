@@ -73,12 +73,22 @@ button {
 <script>
 let currentCode = 1;
 
-function submitForm() {
-    let code = "ZG" + String(currentCode).padStart(3, '0');
+async function submitForm() {
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let time = document.getElementById("time").value;
+
+    let response = await fetch("https://script.google.com/macros/s/AKfycbyB9uBcCrJ8L_mLl8Q5cFmb0_y52yn5OXyCBsNk4vODwZTqZ3YdJld-uqMgEXI8-8nA/exec", {
+        method: "POST",
+        body: JSON.stringify({name, phone, time})
+    });
+
+    let code = await response.text();
+
     document.getElementById("studentCode").innerText = code;
     document.getElementById("resultCard").style.display = "block";
-    currentCode++;
 }
+
 </script>
 
 </body>
