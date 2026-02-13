@@ -78,14 +78,24 @@ async function submitForm() {
     let phone = document.getElementById("phone").value;
     let time = document.getElementById("time").value;
 
-    let response = await fetch("https://script.google.com/macros/s/AKfycbyB9uBcCrJ8L_mLl8Q5cFmb0_y52yn5OXyCBsNk4vODwZTqZ3YdJld-uqMgEXI8-8nA/exec", {
+    let response = await fetch("PUT_YOUR_WEB_APP_URL_HERE", {
         method: "POST",
         body: JSON.stringify({name, phone, time})
     });
 
-    let code = await response.text();
+    let result = await response.text();
 
-    document.getElementById("studentCode").innerText = code;
+    if (result === "PHONE_EXISTS") {
+        alert("هذا الرقم مسجل مسبقًا");
+        return;
+    }
+
+    if (result === "NAME_EXISTS") {
+        alert("هذا الاسم مسجل مسبقًا");
+        return;
+    }
+
+    document.getElementById("studentCode").innerText = result;
     document.getElementById("resultCard").style.display = "block";
 }
 
