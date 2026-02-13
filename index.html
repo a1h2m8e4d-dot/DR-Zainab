@@ -78,7 +78,7 @@ async function submitForm() {
     let phone = document.getElementById("phone").value;
     let time = document.getElementById("time").value;
 
-    let response = await fetch("PUT_YOUR_WEB_APP_URL_HERE", {
+    let response = await fetch("https://script.google.com/macros/s/AKfycbxIddWEy8MqnTOWwrbaVg4dQyPeG9NzJi4kTMZ0WvUkjevJ9DJTQmd5W3DPGTo_PZsX/exec", {
         method: "POST",
         body: JSON.stringify({name, phone, time})
     });
